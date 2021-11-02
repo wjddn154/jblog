@@ -19,15 +19,16 @@
 					<li><a href="">카테고리</a></li>
 					<li><a href="">글작성</a></li>
 				</ul>
-				<form action="" method="post">
+				<form action="${pageContext.request.contextPath }/${authUser.id}/admin/modify" method="post">
 	 		      	<table class="admin-config">
 			      		<tr>
 			      			<td class="t">블로그 제목</td>
-			      			<td><input type="text" size="40" name="title"></td>
+			      			<td><input type="text" size="40" id="title" name="title" value="${blogVO.title}" }></td>
 			      		</tr>
 			      		<tr>
 			      			<td class="t">로고이미지</td>
-			      			<td><img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg"></td>      			
+<%-- 			      			<td><img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg"></td>      --%>
+			      			<td><img src="${pageContext.request.contextPath}/assets/images/${blogVO.logo}"></td> 			
 			      		</tr>      		
 			      		<tr>
 			      			<td class="t">&nbsp;</td>

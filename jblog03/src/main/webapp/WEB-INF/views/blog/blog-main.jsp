@@ -26,8 +26,8 @@
 						<p>
 					</c:when>
 					<c:otherwise>
-<%-- 						<h4>${blogVO.title}</h4> --%>
-<%-- 						<p>${blogVO.logo}</p> --%>
+						<h4>${blogVO.title}</h4>
+						<p>${blogVO.logo}<br><br></p>
 					</c:otherwise>
 				</c:choose>
 				</div>
@@ -49,12 +49,23 @@
 
 		<div id="navigation">
 			<h2>카테고리</h2>
-			<ul>
-				<li><a href="">닥치고 스프링</a></li>
-				<li><a href="">스프링 스터디</a></li>
-				<li><a href="">스프링 프로젝트</a></li>
-				<li><a href="">기타</a></li>
-			</ul>
+			<c:choose>
+				<c:when test="${empty authUser }">
+					<ul>
+						<li><a href="">닥치고 스프링</a></li>
+						<li><a href="">스프링 스터디</a></li>
+						<li><a href="">스프링 프로젝트</a></li>
+						<li><a href="">기타</a></li>
+					</ul>
+				</c:when>
+				<c:otherwise>
+					<ul>
+						<c:forEach items='${clist }' var='cvo' varStatus='status'>
+							<li><a href="${pageContext.request.contextPath }/${cvo.blogId}/${cvo.no}">${cvo.name }</a></li>
+						</c:forEach>
+					</ul>
+				</c:otherwise>
+			</c:choose>
 		</div>
 		
 		<div id="footer">

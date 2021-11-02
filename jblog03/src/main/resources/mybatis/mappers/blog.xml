@@ -8,7 +8,7 @@
 		  into blog 
 		values (#{id },
 				 "default title",
-				 "default logo")
+				 "spring-logo.jpg")
 		]]>
 	</insert>
 
@@ -18,7 +18,7 @@
 				title,
 				logo
 		   from blog
-		  where id = #{no }		
+		  where id = #{id }		
 		]]>		
 	</select>
 	

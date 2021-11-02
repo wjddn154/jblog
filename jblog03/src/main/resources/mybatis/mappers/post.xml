@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	
+	
+	<select id="findAll" resultType="postvo">
+		<![CDATA[
+			 select p.no, p.title, p.contents, p.reg_date, p.category_no
+			   from post p, category c
+			  where p.category_no = c.no
+			    and c.blog_id = #{id};
+		]]>
+	</select>
+	
+	
+</mapper>

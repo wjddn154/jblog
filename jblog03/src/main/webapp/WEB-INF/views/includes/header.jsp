@@ -13,12 +13,12 @@
 					<li><a href="${pageContext.request.contextPath }/main">홈</a></li>
 					<li><a href="${pageContext.request.contextPath }/user/login">로그인</a></li>
 					<li><a href="${pageContext.request.contextPath }/user/join">회원가입</a></li>
-					<li><a href="${pageContext.request.contextPath }/blog/main">내블로그</a></li>
+					<li><a href="${pageContext.request.contextPath }/guest">내블로그</a></li>
 				</c:when>
 				<c:otherwise>
 					<li><a href="${pageContext.request.contextPath }/main">${authUser.name}님의 홈</a></li>
 					<li><a href="${pageContext.request.contextPath }/user/logout">로그아웃</a></li>
-					<li><a href="${pageContext.request.contextPath }/blog/main">내블로그</a></li>
+					<li><a href="${pageContext.request.contextPath }/${authUser.id}">내블로그</a></li>
 				</c:otherwise>
 			</c:choose>
 		</ul>
