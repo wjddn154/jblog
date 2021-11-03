@@ -3,7 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 		<div id="header">
-			<h1><a href="${pageContext.request.contextPath }/board/main">Spring 이야기</a></h1>
+			<c:choose>
+				<c:when test="${empty authUser }">
+					<h1><a href="${pageContext.request.contextPath }/guest">Spring 이야기</a></h1>
+				</c:when>
+				<c:otherwise>
+					<h1><a href="${pageContext.request.contextPath }/${authUser.id}">${blogVO.title }</a></h1>
+				</c:otherwise>
+			</c:choose>
 			<ul>
 				<c:choose>
 					<c:when test="${empty authUser }">
@@ -16,3 +23,4 @@
 				</c:choose>
 			</ul>
 		</div>
+		

@@ -3,14 +3,26 @@
 <mapper namespace="post">
 	
 	
-	<select id="findAll" resultType="postvo">
+	<select id="findAll" parameterType="String" resultType="postvo">
 		<![CDATA[
-			 select p.no, p.title, p.contents, p.reg_date, p.category_no
+			 select p.no, p.title, p.contents, p.reg_date as regDate, p.category_no as categoryNo
 			   from post p, category c
 			  where p.category_no = c.no
-			    and c.blog_id = #{id};
+			    and c.blog_id = #{id}
+		   order by p.reg_date desc
 		]]>
 	</select>
 	
+	
+	<select id="findRecentPost" parameterType="String" resultType="postvo">
+		<![CDATA[
+			 select p.no, p.title, p.contents, p.reg_date as regDate, p.category_no as categoryNo
+			   from post p, category c
+			  where p.category_no = c.no
+			    and c.blog_id = #{id}
+		   order by p.reg_date desc
+		      limit 0,1
+		]]>		
+	</select>
 	
 </mapper>

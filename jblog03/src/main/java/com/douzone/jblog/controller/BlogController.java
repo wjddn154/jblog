@@ -6,25 +6,21 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.vo.BlogVO;
 import com.douzone.jblog.vo.CategoryVO;
 import com.douzone.jblog.vo.PostVO;
-import com.douzone.mysite.security.Auth;
-import com.douzone.mysite.security.AuthUser;
-import com.douzone.mysite.vo.BoardVO;
-import com.douzone.mysite.vo.UserVO;
-import com.douzone.web.util.WebUtil;
 
 @Controller
 //@RequestMapping("/blog")
 @RequestMapping("/{id:(?!assets).*}")
+//@RequestMapping(value={"/{id:(?!assets).*}","/{id:(?!upload).*}"})
 public class BlogController {
 	
 	@Autowired
@@ -51,6 +47,7 @@ public class BlogController {
 		List<CategoryVO> clist = blogService.getCategoryContent(blogid);
 		List<PostVO> plist = blogService.getPostContent(blogid);
 		
+		PostVO recentPostVO = blogService.getRecentPost(blogid);
 		
 		System.out.println(blogVO);
 		System.out.println(clist);
@@ -58,6 +55,7 @@ public class BlogController {
 		model.addAttribute("blogVO", blogVO);
 		model.addAttribute("clist", clist);
 		model.addAttribute("plist", plist);
+		model.addAttribute("recentPostVO", recentPostVO);
 		
 		return "blog/blog-main";
 	}
@@ -77,32 +75,46 @@ public class BlogController {
 	@RequestMapping( value="/admin/modify", method=RequestMethod.POST )	
 	public String modify(
 			@PathVariable("id") String id,
-			@PathVariable("title") String title,
-			@PathVariable("logo") String logo) {
+			@RequestParam( value="title", required=true, defaultValue="default title") String title,
+			@RequestParam( value="logo", required=true, defaultValue="spring-logo.jpg") MultipartFile logo,
+			BlogVO blogVO,
+			Model model) {
 
 		
-		BlogVO blogVO = blogService.modifyBlogContent(title, logo);
+		
+		//VO로 받아보자
+//		BlogVO blogVO = new BlogVO();                                                                                                                                                                                                                                                             
+//		blogVO.setId(id);
+//		blogVO.setTitle(title);
+		try {
+			blogVO.setLogo(blogService.saveImage(logo));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(blogVO);
+		blogService.modifyBlogContent(blogVO);
 
-//		boardVO.setUserNo( authUser.getNo() );
-//		System.out.println("boardVO : " + boardVO);
-//		boardService.modifyContents( boardVO );
 
-//		return "redirect:/board/view/" + boardVO.getNo() + 
-//				"?p=" + page + 
-//				"&kwd=" + WebUtil.encodeURL( keyword, "UTF-8" );
-		return "rdirect:
+		return "redirect:/" + id;
+//		return "blog/blog-main";
 	}
 
 	
 	
 	//카테고리 페이지
 	@RequestMapping("/admin/category")
-	public String adminCategory(@PathVariable("blogid") String blogid) {
-		System.out.println("adminCategory blogid : " + blogid);
+	public String adminCategory(@PathVariable("id") String id) {
+		System.out.println("adminCategory id : " + id);
 		return "blog/blog-admin-category";
 	}
 	
-	
+	//쓰기 페이지
+	@RequestMapping("/admin/write")
+	public String adminWrite(@PathVariable("id") String id) {
+		System.out.println("adminWrite id : " + id);
+		return "blog/blog-admin-write";
+	}
 	
 	
 	

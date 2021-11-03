@@ -22,15 +22,23 @@ public class BlogRepository {
 	}
 
 	public List<CategoryVO> categoryFind(String id) {
-		return sqlSession.selectList("category.findAll");
+		return sqlSession.selectList("category.findAll", id);
 	}
 	
 	public List<PostVO> postFind(String id) {
-		return sqlSession.selectList("post.findAll");
+		return sqlSession.selectList("post.findAll", id);
 	}
 
 	public CategoryVO categoryFindByNo(Optional<Integer> categoryNo) {
 		return sqlSession.selectOne( "category.findByNo", categoryNo);
+	}
+
+	public int update(BlogVO blogVO) {
+		return sqlSession.update( "blog.update", blogVO );
+	}
+
+	public PostVO getRecentPost(String blogid) {
+		return sqlSession.selectOne( "post.findRecentPost", blogid);
 	}
 
 	

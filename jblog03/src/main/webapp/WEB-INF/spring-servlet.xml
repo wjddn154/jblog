@@ -86,7 +86,7 @@
 	</bean>
 
 	<!-- mvc url-resource mapping -->
-	<mvc:resources mapping="/gallery/images/**"	location="file:/upload-jblog/" />
+	<mvc:resources mapping="/upload/images/**"	location="file:/upload-jblog/" />
 	
 	 <!-- MessageSource -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">

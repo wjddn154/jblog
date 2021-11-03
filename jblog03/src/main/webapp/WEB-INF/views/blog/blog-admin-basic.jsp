@@ -16,10 +16,10 @@
 			<div id="content" class="full-screen">
 				<ul class="admin-menu">
 					<li class="selected">기본설정</li>
-					<li><a href="">카테고리</a></li>
-					<li><a href="">글작성</a></li>
+					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/category">카테고리</a></li>
+					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/write">글작성</a></li>
 				</ul>
-				<form action="${pageContext.request.contextPath }/${authUser.id}/admin/modify" method="post">
+				<form action="${pageContext.request.contextPath }/${authUser.id}/admin/modify" method="post" enctype="multipart/form-data">
 	 		      	<table class="admin-config">
 			      		<tr>
 			      			<td class="t">블로그 제목</td>
@@ -28,16 +28,16 @@
 			      		<tr>
 			      			<td class="t">로고이미지</td>
 <%-- 			      			<td><img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg"></td>      --%>
-			      			<td><img src="${pageContext.request.contextPath}/assets/images/${blogVO.logo}"></td> 			
-			      		</tr>      		
+			      			<td><img src="${pageContext.request.contextPath}${blogVO.logo}"></td>
+			      		</tr>
 			      		<tr>
 			      			<td class="t">&nbsp;</td>
-			      			<td><input type="file" name="logo-file"></td>      			
-			      		</tr>           		
+			      			<td><input type="file" id="logo" name="logo"></td>
+			      		</tr>
 			      		<tr>
 			      			<td class="t">&nbsp;</td>
-			      			<td class="s"><input type="submit" value="기본설정 변경"></td>      			
-			      		</tr>           		
+			      			<td class="s"><input type="submit" value="기본설정 변경"></td>
+			      		</tr>
 			      	</table>
 				</form>
 			</div>

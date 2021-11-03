@@ -3,7 +3,7 @@
 <mapper namespace="category">
 	
 	
-	<select id="findAll" resultType="categoryvo">
+	<select id="findAll" parameterType="String" resultType="categoryvo">
 		<![CDATA[
 		  select no, name, category.desc, blog_id as blogId
 		    from category
