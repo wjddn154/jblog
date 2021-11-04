@@ -32,7 +32,7 @@
 			      		</tr>
 			      		<tr>
 			      			<td class="t">&nbsp;</td>
-			      			<td><input type="file" id="logo" name="logo"></td>
+			      			<td><input type="file" id="logo" name="logo" value="${blogVO.logo}"></td>
 			      		</tr>
 			      		<tr>
 			      			<td class="t">&nbsp;</td>

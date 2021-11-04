@@ -14,12 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.vo.BlogVO;
+import com.douzone.jblog.vo.CategoryDTO;
 import com.douzone.jblog.vo.CategoryVO;
 import com.douzone.jblog.vo.PostVO;
 
 @Controller
 //@RequestMapping("/blog")
-@RequestMapping("/{id:(?!assets).*}")
+@RequestMapping("/{id:(?!^assets$|^upload$).*}")
 //@RequestMapping(value={"/{id:(?!assets).*}","/{id:(?!upload).*}"})
 public class BlogController {
 	
@@ -52,6 +53,7 @@ public class BlogController {
 		System.out.println(blogVO);
 		System.out.println(clist);
 		System.out.println(plist);
+
 		model.addAttribute("blogVO", blogVO);
 		model.addAttribute("clist", clist);
 		model.addAttribute("plist", plist);
@@ -76,43 +78,60 @@ public class BlogController {
 	public String modify(
 			@PathVariable("id") String id,
 			@RequestParam( value="title", required=true, defaultValue="default title") String title,
-			@RequestParam( value="logo", required=true, defaultValue="spring-logo.jpg") MultipartFile logo,
-			BlogVO blogVO,
+			@RequestParam("logo") MultipartFile logo,
+//			BlogVO blogVO,
 			Model model) {
 
-		
-		
 		//VO로 받아보자
-//		BlogVO blogVO = new BlogVO();                                                                                                                                                                                                                                                             
-//		blogVO.setId(id);
-//		blogVO.setTitle(title);
+		BlogVO blogVO = new BlogVO();                                                                                                                                                                                                                                                             
+		blogVO.setId(id);
+		blogVO.setTitle(title);
 		try {
 			blogVO.setLogo(blogService.saveImage(logo));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(blogVO.getLogo() == null) {
+			blogVO.setLogo("/assets/images/spring-logo.jpg");
+		}
+		
 		System.out.println(blogVO);
 		blogService.modifyBlogContent(blogVO);
 
 
 		return "redirect:/" + id;
-//		return "blog/blog-main";
 	}
 
 	
 	
 	//카테고리 페이지
 	@RequestMapping("/admin/category")
-	public String adminCategory(@PathVariable("id") String id) {
+	public String adminCategory(@PathVariable("id") String id, Model model) {
 		System.out.println("adminCategory id : " + id);
+		
+		
+		BlogVO blogVO = blogService.getBlogContent(id);
+		model.addAttribute("blogVO", blogVO);
+		
+		List<CategoryDTO> clist = blogService.getCategoryContentWithCount(id);
+		model.addAttribute("clist", clist);
+		System.out.println(clist);
+		
 		return "blog/blog-admin-category";
 	}
 	
 	//쓰기 페이지
 	@RequestMapping("/admin/write")
-	public String adminWrite(@PathVariable("id") String id) {
+	public String adminWrite(@PathVariable("id") String id, Model model) {
 		System.out.println("adminWrite id : " + id);
+		
+		BlogVO blogVO = blogService.getBlogContent(id);
+		model.addAttribute("blogVO", blogVO);
+		
+		List<CategoryVO> clist = blogService.getCategoryContent(id);
+		model.addAttribute("clist", clist);
+		
 		return "blog/blog-admin-write";
 	}
 	

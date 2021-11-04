@@ -9,6 +9,15 @@
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
 </head>
+
+
+<script>
+var onClickPost = function() {
+	
+}
+
+</script>
+
 <body>
 	<div id="container">
 		<c:import url="/WEB-INF/views/blog/include/header.jsp" />
@@ -26,8 +35,8 @@
 							<p>
 						</c:when>
 						<c:otherwise>
-							<h4>${recentPostVO.title }</h4>
-							<p>${recentPostVO.contents }</p>
+							<h4 id="recentPostTitle">${recentPostVO.title }</h4>
+							<p id="recentPostContents">${recentPostVO.contents }</p>
 						</c:otherwise>
 					</c:choose>
 					
@@ -47,7 +56,8 @@
 						<ul class="blog-list">
 							<c:forEach items='${plist }' var='pvo' varStatus='status'>
 								<li>
-									<a href="${pageContext.request.contextPath }/${authUser.id}/${pvo.categoryNo}/${pvo.no}">${pvo.title }</a>
+									<a id="onClickPost" href="${pageContext.request.contextPath }/${authUser.id}/${pvo.categoryNo}/${pvo.no}">${pvo.title }</a>
+<%-- 									<input type="text" id="no" name="no" value="${boardVO.no }" > --%>
 									<span>${pvo.regDate }</span>
 								</li>
 							</c:forEach>

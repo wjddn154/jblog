@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.douzone.jblog.repository.BlogRepository;
 import com.douzone.jblog.vo.BlogVO;
+import com.douzone.jblog.vo.CategoryDTO;
 import com.douzone.jblog.vo.CategoryVO;
 import com.douzone.jblog.vo.PostVO;
 
@@ -112,6 +113,10 @@ public class BlogService {
 		filename += ("." + extName);
 		
 		return filename;
+	}
+
+	public List<CategoryDTO> getCategoryContentWithCount(String id) {
+		return blogRepository.categorywithcountFind(id);
 	}
 
 	

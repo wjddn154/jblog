@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.jblog.vo.BlogVO;
+import com.douzone.jblog.vo.CategoryDTO;
 import com.douzone.jblog.vo.CategoryVO;
 import com.douzone.jblog.vo.PostVO;
 
@@ -39,6 +40,10 @@ public class BlogRepository {
 
 	public PostVO getRecentPost(String blogid) {
 		return sqlSession.selectOne( "post.findRecentPost", blogid);
+	}
+
+	public List<CategoryDTO> categorywithcountFind(String id) {
+		return sqlSession.selectList("category.findAllWithCount", id);
 	}
 
 	
