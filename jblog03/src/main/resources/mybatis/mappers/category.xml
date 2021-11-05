@@ -11,16 +11,6 @@
 		]]>
 	</select>
 	
-	<select id="findAllWithCount" parameterType="String" resultType="categoryvo">
-		<![CDATA[
-		  select c.no, c.name, c.desc, c.blog_id as blogId, count(p.no) as countPost
-		    from category c, post p
-		   where c.blog_id = #{id}
-             and c.no = p.category_no
-		  order by no desc
-		]]>
-	</select>
-	
 	<select id="findByNo" parameterType="Integer" resultType="categoryvo">
 		<![CDATA[
 	      select no, name, category.desc, blog_id as blogId

@@ -8,6 +8,40 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<script>
+// $(document).ready(function() {
+// window.onload = function() {
+	
+window.onload = function() {
+    document.getElementById('onclick').onclick = function() {	
+    
+//     $('#theForm').submit(function(event){
+
+	alert("!!!!");
+	var cname = $("#name").val();
+	var cdesc = $("#desc").val();
+	var categoryvo = {
+			name: cname,
+			desc: cdesc
+	};
+	
+	$.ajax({
+		method: "post",
+		dataType: "json",
+		url: "${pageContext.request.contextPath }/${authUser.id}/categoryadd",
+		data: categoryvo,
+		success: function(data) {
+			console.log(data);
+		},
+		error: function() {
+			alert("에러발생!");
+		}
+	})
+	
+	
+};
+
+</script>
 </head>
 <body>
 	<div id="container">
@@ -42,15 +76,15 @@
 		      	<table id="admin-cat-add">
 		      		<tr>
 		      			<td class="t">카테고리명</td>
-		      			<td><input type="text" name="name"></td>
+		      			<td><input type="text" id="name" name="name"></td>
 		      		</tr>
 		      		<tr>
 		      			<td class="t">설명</td>
-		      			<td><input type="text" name="desc"></td>
+		      			<td><input type="text" id="desc" name="desc"></td>
 		      		</tr>
 		      		<tr>
 		      			<td class="s">&nbsp;</td>
-		      			<td><input type="submit" value="카테고리 추가"></td>
+		      			<td><input type="submit" id="onclick" value="카테고리 추가"></td>
 		      		</tr>      		      		
 		      	</table> 
 			</div>

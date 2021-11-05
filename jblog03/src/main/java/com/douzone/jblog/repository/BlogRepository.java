@@ -43,7 +43,11 @@ public class BlogRepository {
 	}
 
 	public List<CategoryDTO> categorywithcountFind(String id) {
-		return sqlSession.selectList("category.findAllWithCount", id);
+		return sqlSession.selectList("categorydto.findAllWithCount", id);
+	}
+
+	public int addPost(PostVO postVO) {
+		return sqlSession.update( "post.addpost", postVO );
 	}
 
 	

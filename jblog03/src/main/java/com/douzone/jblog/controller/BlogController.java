@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.douzone.jblog.security.Auth;
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.vo.BlogVO;
 import com.douzone.jblog.vo.CategoryDTO;
@@ -63,7 +64,7 @@ public class BlogController {
 	}
 	
 	//블로그 관리 페이지
-//	@Auth 작업 추가해야함
+	@Auth
 	@RequestMapping("/admin/basic")
 	public String adminBasic(@PathVariable("id") String blogid, Model model) {
 		BlogVO blogVO = blogService.getBlogContent(blogid);
@@ -73,7 +74,7 @@ public class BlogController {
 	}
 	
 	
-//	@Auth
+	@Auth
 	@RequestMapping( value="/admin/modify", method=RequestMethod.POST )	
 	public String modify(
 			@PathVariable("id") String id,
@@ -106,6 +107,7 @@ public class BlogController {
 	
 	
 	//카테고리 페이지
+	@Auth
 	@RequestMapping("/admin/category")
 	public String adminCategory(@PathVariable("id") String id, Model model) {
 		System.out.println("adminCategory id : " + id);
@@ -122,6 +124,7 @@ public class BlogController {
 	}
 	
 	//쓰기 페이지
+	@Auth
 	@RequestMapping("/admin/write")
 	public String adminWrite(@PathVariable("id") String id, Model model) {
 		System.out.println("adminWrite id : " + id);
@@ -135,6 +138,27 @@ public class BlogController {
 		return "blog/blog-admin-write";
 	}
 	
+	//post 추가
+	@RequestMapping(value="/postadd", method=RequestMethod.POST)
+	public String postAdd(@PathVariable("id") String id, PostVO postVO, @RequestParam(value="category", required=true, defaultValue= "1") int no) {
+		
+		postVO.setCategoryNo(no);
+		System.out.println("postVO : "  + postVO);
+		blogService.addCategoryPost(postVO);
+		
+		return "redirect:/" + id;
+	}
 	
+	//post 추가
+	@RequestMapping(value="/categoryadd", method=RequestMethod.POST)
+	public String categoryAdd(@PathVariable("id") String id, CategoryVO categoryVO) {
+		
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//		postVO.setCategoryNo(no);
+//		System.out.println("postVO : "  + postVO);
+//		blogService.addCategoryPost(postVO);
+		
+		return "redirect:/" + id;
+	}
 	
 }

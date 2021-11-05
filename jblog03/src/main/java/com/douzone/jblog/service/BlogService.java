@@ -119,5 +119,11 @@ public class BlogService {
 		return blogRepository.categorywithcountFind(id);
 	}
 
+	public boolean addCategoryPost(PostVO postVO) {
+		
+		int count = blogRepository.addPost( postVO );
+		return count == 1;					
+	}
+
 	
 }

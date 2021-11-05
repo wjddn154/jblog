@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
+
 </head>
 <body>
 	<div id="container">
@@ -19,22 +20,22 @@
 					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/category">카테고리</a></li>
 					<li class="selected">글작성</li>
 				</ul>
-				<form action="${pageContext.request.contextPath }" method="post">
+				<form action="${pageContext.request.contextPath }/${authUser.id}/postadd" method="post">
 			      	<table class="admin-cat-write">
 			      		<tr>
 			      			<td class="t">제목</td>
 			      			<td>
 			      				<input type="text" size="60" name="title">
 				      			<select name="category">
-									<c:forEach items='${clist }' var='cvo' varStatus='status'>
-					      				<option>${cvo.name }</option>
+									<c:forEach items='${clist }' var='cvo'>
+					      				<option id="categoryNo" value="${cvo.no }">${cvo.name }</option>
 				      				</c:forEach>
 				      			</select>
 				      		</td>
 			      		</tr>
 			      		<tr>
 			      			<td class="t">내용</td>
-			      			<td><textarea name="content"></textarea></td>
+			      			<td><textarea name="contents"></textarea></td>
 			      		</tr>
 			      		<tr>
 			      			<td>&nbsp;</td>

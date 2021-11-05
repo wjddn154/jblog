@@ -25,4 +25,11 @@
 		]]>		
 	</select>
 	
+	<insert id="addpost" parameterType="postvo">
+		<![CDATA[
+		insert into post values
+		(null, #{title}, #{contents}, now(), #{categoryNo});
+		]]>
+	</insert>
+	
 </mapper>
