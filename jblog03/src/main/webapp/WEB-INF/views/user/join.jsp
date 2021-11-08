@@ -12,11 +12,12 @@
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
 <script src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script>
+//id 변경시 가입하기 버튼 비활성화
 $(function(){
 	$("#btn-checkeId").click(function() {
 		var id = $("#id").val();
 		if(id == '') {
-			return;
+			return false;
 		}
 		
 		$.ajax({
@@ -39,14 +40,28 @@ $(function(){
 						.val("")
 						.focus();
 					return;
+				} else {
+					//가입하기 버튼 활성화
+					$('#register-button').prop('disabled', false);
 				}
 				
 				$("#btn-checkeId").hide();
 				$("#img-checkId").show();
+
 			}
 		});		
 	});	
 });
+
+$(function () {
+   var inputElement = $("#id");
+   inputElement.focus(function() {
+	 	$('#register-button').prop('disabled', true);
+	 	$("#btn-checkeId").show();
+	 	$("#img-checkId").hide();
+	})
+});
+
 </script>
 
 </head>
@@ -60,7 +75,7 @@ $(function(){
 			modelAttribute="userVO" 
 			class="join-form"
 			id="join-form" 
-			name="joinForm" 
+			name="join-Form" 
 			method="post" 
 			action="${pageContext.request.contextPath}/user/join">
 			
@@ -101,7 +116,7 @@ $(function(){
 				<label class="l-float">서비스 약관에 동의합니다.</label>
 			</fieldset>
 
-			<input type="submit" value="가입하기">
+			<input type="submit" id="register-button" value="가입하기" disabled>
 
 		</form:form>
 	</div>

@@ -8,7 +8,7 @@
 		  into blog 
 		values (#{id },
 				 "default title",
-				 "spring-logo.jpg")
+				 "/assets/images/spring-logo.jpg")
 		]]>
 	</insert>
 

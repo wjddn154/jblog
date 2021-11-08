@@ -39,7 +39,6 @@ var onClickPost = function() {
 							<p id="recentPostContents">${recentPostVO.contents }</p>
 						</c:otherwise>
 					</c:choose>
-					
 				</div>
 				
 				<c:choose>

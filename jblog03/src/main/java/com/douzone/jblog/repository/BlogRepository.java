@@ -50,6 +50,10 @@ public class BlogRepository {
 		return sqlSession.update( "post.addpost", postVO );
 	}
 
+	public int addCategory(CategoryVO categoryVO) {
+		return sqlSession.update( "category.addcategory", categoryVO );
+	}
+
 	
 	
 }

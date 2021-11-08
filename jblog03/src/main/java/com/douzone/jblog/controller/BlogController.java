@@ -80,7 +80,6 @@ public class BlogController {
 			@PathVariable("id") String id,
 			@RequestParam( value="title", required=true, defaultValue="default title") String title,
 			@RequestParam("logo") MultipartFile logo,
-//			BlogVO blogVO,
 			Model model) {
 
 		//VO로 받아보자
@@ -99,7 +98,6 @@ public class BlogController {
 		
 		System.out.println(blogVO);
 		blogService.modifyBlogContent(blogVO);
-
 
 		return "redirect:/" + id;
 	}
@@ -152,11 +150,9 @@ public class BlogController {
 	//post 추가
 	@RequestMapping(value="/categoryadd", method=RequestMethod.POST)
 	public String categoryAdd(@PathVariable("id") String id, CategoryVO categoryVO) {
-		
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//		postVO.setCategoryNo(no);
-//		System.out.println("postVO : "  + postVO);
-//		blogService.addCategoryPost(postVO);
+		categoryVO.setBlogId(id);
+		System.out.println("/categoryadd : " + categoryVO);
+		blogService.addCategory(categoryVO);
 		
 		return "redirect:/" + id;
 	}

@@ -8,15 +8,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<script src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+
 <script>
-// $(document).ready(function() {
-// window.onload = function() {
 	
 window.onload = function() {
-    document.getElementById('onclick').onclick = function() {	
+    document.getElementById('onclick').onclick = function() {
     
-//     $('#theForm').submit(function(event){
-
 	alert("!!!!");
 	var cname = $("#name").val();
 	var cdesc = $("#desc").val();
@@ -34,13 +32,12 @@ window.onload = function() {
 			console.log(data);
 		},
 		error: function() {
-			alert("에러발생!");
+			console.log("에러발생!");
 		}
 	})
 	
-	
-};
-
+    };
+}
 </script>
 </head>
 <body>
@@ -84,8 +81,11 @@ window.onload = function() {
 		      		</tr>
 		      		<tr>
 		      			<td class="s">&nbsp;</td>
-		      			<td><input type="submit" id="onclick" value="카테고리 추가"></td>
-		      		</tr>      		      		
+		      			<td>
+<%-- 		      				<input type="hidden" id="blogId" name="blogId" value="${authUser.id }">    --%>
+		      				<input type="submit" id="onclick" value="카테고리 추가">
+		      			</td>
+		      		</tr>
 		      	</table> 
 			</div>
 		</div>

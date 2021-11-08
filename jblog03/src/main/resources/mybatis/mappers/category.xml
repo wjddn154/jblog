@@ -19,5 +19,21 @@
 		]]>		
 	</select>
 	
+	<insert id="addcategory" parameterType="categoryvo">
+		<choose>
+			<when test="name == null">
+				<![CDATA[
+				insert into category values
+				(null, "미분류", "default category", #{blogId});
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				insert into category values
+				(null, #{name}, #{desc}, #{blogId});
+				]]>
+			</otherwise>
+		</choose>
+	</insert>
 	
 </mapper>

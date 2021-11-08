@@ -125,5 +125,10 @@ public class BlogService {
 		return count == 1;					
 	}
 
+	public boolean addCategory(CategoryVO categoryVO) {
+		int count = blogRepository.addCategory( categoryVO );
+		return count == 1;				
+	}
+
 	
 }

@@ -5,9 +5,9 @@
 	<select id="findAllWithCount" parameterType="String" resultType="categorydto">
 		<![CDATA[
 		  select c.no, c.name, c.desc, c.blog_id as blogId, count(p.no) as countPost
-		    from category c, post p
+		    from category c left outer join post p
+		      on c.no = p.category_no
 		   where c.blog_id = #{id}
-             and c.no = p.category_no
         group by c.no
 		order by no desc
 		]]>

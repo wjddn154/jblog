@@ -6,9 +6,11 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.douzone.jblog.exception.UserRepositoryException;
 import com.douzone.jblog.vo.BlogVO;
+import com.douzone.jblog.vo.CategoryVO;
 import com.douzone.jblog.vo.UserVO;
 
 @Repository
@@ -17,6 +19,7 @@ public class UserRepository {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@Transactional
 	public boolean insert(UserVO userVO) {
 		int count1 = sqlSession.insert("user.insert", userVO);
 		int count2 = 0;
@@ -24,7 +27,13 @@ public class UserRepository {
 		if(count1==1) {
 			BlogVO blogVO = new BlogVO();
 			blogVO.setId(userVO.getId());
-			count2 = sqlSession.insert("blog.insert", blogVO);
+			count2 = sqlSession.insert("blog.insert1", blogVO);
+		}
+		
+		if(count2==1) {
+			CategoryVO categoryVO = new CategoryVO();
+			categoryVO.setBlogId(userVO.getId());
+			count2 = sqlSession.insert("category.addcategory", categoryVO);
 		}
 		
 		return count2 == 1;
