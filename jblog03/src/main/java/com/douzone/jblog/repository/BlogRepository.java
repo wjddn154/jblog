@@ -47,11 +47,15 @@ public class BlogRepository {
 	}
 
 	public int addPost(PostVO postVO) {
-		return sqlSession.update( "post.addpost", postVO );
+		return sqlSession.insert( "post.addpost", postVO );
 	}
 
 	public int addCategory(CategoryVO categoryVO) {
-		return sqlSession.update( "category.addcategory", categoryVO );
+		return sqlSession.insert( "category.addcategory", categoryVO );
+	}
+
+	public CategoryDTO findCategoryDTO(CategoryVO categoryVO) {
+		return sqlSession.selectOne( "categorydto.findCategoryDTO", categoryVO);
 	}
 
 	

@@ -11,33 +11,69 @@
 <script src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 
 <script>
-	
 window.onload = function() {
-    document.getElementById('onclick').onclick = function() {
-    
-	alert("!!!!");
-	var cname = $("#name").val();
-	var cdesc = $("#desc").val();
+	var count = document.getElementById("clistLength").value;
+// 	count = parseInt(count)+1;
+// 	console.log(count);
+	
+	var deleteCategory = function() {
+		console.log("!!");
+	}
+	
+	
+    document.getElementById('addButton').onclick = function() {
+// 	count = parseInt(count)+1;
+
 	var categoryvo = {
-			name: cname,
-			desc: cdesc
+			'name': $("#name").val(),
+			'desc': $("#desc").val()
 	};
 	
-	$.ajax({
-		method: "post",
-		dataType: "json",
-		url: "${pageContext.request.contextPath }/${authUser.id}/categoryadd",
-		data: categoryvo,
-		success: function(data) {
-			console.log(data);
-		},
-		error: function() {
-			console.log("에러발생!");
-		}
-	})
+		$.ajax({
+			url: "${pageContext.request.contextPath }/${authUser.id}/categoryAdd",
+			type: "post",
+			dataType: "json",
+			data: categoryvo,
+			error: function(xhr, status, e) {
+				console.log(status, e);
+			},
+			success: function(data) {
+				console.log("카테고리가 생성되었습니다 data : " + data);
+				$("#name").val('');
+				$("#desc").val('');
+				data.count = parseInt(count)+1;;
+				refreshTable(data);
+			}
+		});
 	
     };
+    
+    
+    document.getElementById('deleteButton').onclick = function() {
+		console.log(this);
+    };
+    
+    
+    
+    
+    
 }
+
+//카테고리 테이블에 데이터 추가
+function refreshTable(data) {
+	console.log(data);
+	var html = "<tr>"
+			 + "<td>" + data.count + "</td>"
+			 + "<td>" + data.name + "</td>"
+			 + "<td>" + data.countPost + "</td>"
+			 + "<td>" + data.desc + "</td>"
+			 + "<td><img src='${pageContext.request.contextPath}/assets/images/delete.jpg'></td>"
+			 + "</tr>";
+	$(".admin-cat").append(html);	
+}
+
+
+
 </script>
 </head>
 <body>
@@ -58,17 +94,20 @@ window.onload = function() {
 		      			<th>설명</th>
 		      			<th>삭제</th>      			
 		      		</tr>
+		      		<c:set var='count' value='${fn:length(clist) }' />
 					<c:forEach items='${clist }' var='cdto' varStatus='status'>
+	      			<input type="hidden" id="categoryNo" value="${cdto.no}" />
 						<tr>
-							<td>${cdto.no }</td>
+							<td>${status.index+1 }</td>
 							<td>${cdto.name }</td>
 							<td>${cdto.countPost }</td>
 							<td>${cdto.desc }</td>
-							<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
+							<td><img id="deleteButton" value="${cdto.no }" src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
 						</tr>  
       				</c:forEach>
 				</table>
-      	
+      			<input type="hidden" id="clistLength" value="${fn:length(clist)}" />
+      			
       			<h4 class="n-c">새로운 카테고리 추가</h4>
 		      	<table id="admin-cat-add">
 		      		<tr>
@@ -82,18 +121,13 @@ window.onload = function() {
 		      		<tr>
 		      			<td class="s">&nbsp;</td>
 		      			<td>
-<%-- 		      				<input type="hidden" id="blogId" name="blogId" value="${authUser.id }">    --%>
-		      				<input type="submit" id="onclick" value="카테고리 추가">
+		      				<input type="submit" id="addButton" value="카테고리 추가">
 		      			</td>
 		      		</tr>
 		      	</table> 
 			</div>
 		</div>
-		<div id="footer">
-			<p>
-				<strong>Spring 이야기</strong> is powered by JBlog (c)2016
-			</p>
-		</div>
+		<c:import url="/WEB-INF/views/blog/include/footer.jsp" />
 	</div>
 </body>
 </html>

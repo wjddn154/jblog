@@ -5,11 +5,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.douzone.jblog.security.Auth;
@@ -67,6 +69,7 @@ public class BlogController {
 	@Auth
 	@RequestMapping("/admin/basic")
 	public String adminBasic(@PathVariable("id") String blogid, Model model) {
+		System.out.println("블로그 관리 페이지 이동");
 		BlogVO blogVO = blogService.getBlogContent(blogid);
 		model.addAttribute("blogVO", blogVO);
 
@@ -108,7 +111,7 @@ public class BlogController {
 	@Auth
 	@RequestMapping("/admin/category")
 	public String adminCategory(@PathVariable("id") String id, Model model) {
-		System.out.println("adminCategory id : " + id);
+		System.out.println("카테고리 페이지 이동 id : " + id);
 		
 		
 		BlogVO blogVO = blogService.getBlogContent(id);
@@ -125,7 +128,7 @@ public class BlogController {
 	@Auth
 	@RequestMapping("/admin/write")
 	public String adminWrite(@PathVariable("id") String id, Model model) {
-		System.out.println("adminWrite id : " + id);
+		System.out.println("쓰기 페이지 이동 id : " + id);
 		
 		BlogVO blogVO = blogService.getBlogContent(id);
 		model.addAttribute("blogVO", blogVO);
@@ -147,14 +150,18 @@ public class BlogController {
 		return "redirect:/" + id;
 	}
 	
-	//post 추가
-	@RequestMapping(value="/categoryadd", method=RequestMethod.POST)
-	public String categoryAdd(@PathVariable("id") String id, CategoryVO categoryVO) {
+	//AJAX 요청에 대한 처리가 정상적으로 완료되어도 브라우저에 404 에러로 표시되는 경우가 있다. 
+	//이는 서버에서 아무것도 응답하지 않기 때문이다. Response 객체에 응답값을 설정해주면 404 에러는 발생하지 않는다.
+	@ResponseBody
+	@RequestMapping(value="/categoryAdd", method=RequestMethod.POST)
+	@Transactional
+	public CategoryDTO categoryAdd(@PathVariable("id") String id, CategoryVO categoryVO) {
 		categoryVO.setBlogId(id);
-		System.out.println("/categoryadd : " + categoryVO);
 		blogService.addCategory(categoryVO);
 		
-		return "redirect:/" + id;
+		CategoryDTO cdto = blogService.findCategoryDTO(categoryVO);
+		System.out.println("cdto : " + cdto);
+		return cdto;
 	}
 	
 }

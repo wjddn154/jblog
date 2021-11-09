@@ -130,5 +130,11 @@ public class BlogService {
 		return count == 1;				
 	}
 
+	public CategoryDTO findCategoryDTO(CategoryVO categoryVO) {
+		CategoryDTO categoryDTO = blogRepository.findCategoryDTO(categoryVO);
+		
+		return categoryDTO;
+	}
+
 	
 }
