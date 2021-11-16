@@ -136,5 +136,9 @@ public class BlogService {
 		return categoryDTO;
 	}
 
+	public boolean categoryDelete(Long no) {
+		return blogRepository.categoryDeleteByNo(no);
+	}
+
 	
 }

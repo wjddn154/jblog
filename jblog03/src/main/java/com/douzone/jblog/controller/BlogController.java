@@ -1,5 +1,6 @@
 package com.douzone.jblog.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.douzone.jblog.dto.JsonResult;
 import com.douzone.jblog.security.Auth;
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.vo.BlogVO;
@@ -155,13 +157,45 @@ public class BlogController {
 	@ResponseBody
 	@RequestMapping(value="/categoryAdd", method=RequestMethod.POST)
 	@Transactional
-	public CategoryDTO categoryAdd(@PathVariable("id") String id, CategoryVO categoryVO) {
+	public JsonResult categoryAdd(@PathVariable("id") String id, CategoryVO categoryVO) {
 		categoryVO.setBlogId(id);
 		blogService.addCategory(categoryVO);
 		
 		CategoryDTO cdto = blogService.findCategoryDTO(categoryVO);
 		System.out.println("cdto : " + cdto);
-		return cdto;
+		return JsonResult.success(cdto);
 	}
+	
+	
+	//AJAX Category 삭제
+	@ResponseBody
+	@RequestMapping(value="/categoryDelete/{no}")
+	public JsonResult categoryDelete(@PathVariable("id") String id, @PathVariable("no") Long no) {
+		boolean result = blogService.categoryDelete(no);
+		Long data = 0L;
+		
+		//삭제가 안된 경우
+		if(result == false) {
+			data = -1L;
+		} else {
+			data = no;
+		}
+		
+		return JsonResult.success(data);
+	}
+	
+	/*
+	 * //AJAX Category table 갱신
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("/categoryList") public JsonResult
+	 * categoryList(@PathVariable("id") String id) {
+	 * 
+	 * List<CategoryDTO> clist = new ArrayList<>(); clist =
+	 * blogService.getCategoryContentWithCount(id);
+	 * 
+	 * return JsonResult.success(clist); }
+	 */
 	
 }

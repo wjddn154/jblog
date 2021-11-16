@@ -7,72 +7,116 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
-<script src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
-
+<script src="${pageContext.request.contextPath }/assets/js/jquery/jquery-3.6.0.js"></script>
+<script src="${pageContext.request.contextPath }/assets/js/jquery/ejs.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-window.onload = function() {
-	var count = document.getElementById("clistLength").value;
-// 	count = parseInt(count)+1;
-// 	console.log(count);
+//카테고리 추가
+var listItemEJS = new EJS({
+	url: '${pageContext.request.contextPath }/assets/js/jquery/listitem-template.ejs'
 	
-	var deleteCategory = function() {
-		console.log("!!");
-	}
+});
+$(function() {
+	document.getElementById('addButton').onclick = function() {
+	event.preventDefault();
 	
-	
-    document.getElementById('addButton').onclick = function() {
-// 	count = parseInt(count)+1;
-
-	var categoryvo = {
+	categoryvo = {
 			'name': $("#name").val(),
 			'desc': $("#desc").val()
 	};
+	console.log(categoryvo);
 	
+	if(categoryvo.name == '' || categoryvo.desc == '') {
+		return;
+	}
+
 		$.ajax({
 			url: "${pageContext.request.contextPath }/${authUser.id}/categoryAdd",
 			type: "post",
 			dataType: "json",
 			data: categoryvo,
-			error: function(xhr, status, e) {
-				console.log(status, e);
-			},
 			success: function(data) {
-				console.log("카테고리가 생성되었습니다 data : " + data);
+				console.log("카테고리가 생성되었습니다 data : " + JSON.stringify(data.data));
 				$("#name").val('');
 				$("#desc").val('');
-				data.count = parseInt(count)+1;;
-				refreshTable(data);
+				data.data.count = parseInt($('#clistLength').val())+1;
+				console.log("카테고리가 생성되었습니다 data11231 : " + JSON.stringify(data.data));
+
+				console.log("count : " + data.count);
+				//카테고리 테이블에 데이터 추가
+				var html = listItemEJS.render(data.data);
+				console.log(html);
+				$('#admin-cat > tbody:last').append(html);
+
+			},
+			error: function(xhr, status, error) {
+				console.error(status + " : " + error);	
 			}
 		});
+    };
+});
+
+
+//카테고리 삭제
+$(function(){
 	
-    };
-    
-    
-    document.getElementById('deleteButton').onclick = function() {
-		console.log(this);
-    };
-    
-    
-    
-    
-    
-}
+	// 삭제 다이알로그 객체 만들기
+	var dialogDelete = $('#dialog-delete-form').dialog({
+		autoOpen: false,
+		modal: true,
+		buttons: {
+			"삭제": function() {
+				// ajax 삭제....
+				var no = $('#hidden-no').val();
+				var url = '${pageContext.request.contextPath }/${authUser.id}/categoryDelete/' + no;
+				
+				$.ajax({
+					url: url,
+					type: 'post',
+					dataType: 'json',
+					success: function(response) {
+						
+						if(response.data == -1) {
+							$('.validateTips.error').show();
+							return;
+						}
+						// 삭제가 된 경우
+						$('#admin-cat tr img[data-no=' + response.data + ']').parent().parent().remove();
+						dialogDelete.dialog('close');
+					}
+				});
+			},
+			"취소": function() {
+				$(this).dialog('close');
+			}
+		}
+	});
+	
+	
+	
+	
+	// 글 삭제 버튼 (Live Event)
+	$(document).on('click', '#admin-cat tr td img', function(event){
+		event.preventDefault();
 
-//카테고리 테이블에 데이터 추가
-function refreshTable(data) {
-	console.log(data);
-	var html = "<tr>"
-			 + "<td>" + data.count + "</td>"
-			 + "<td>" + data.name + "</td>"
-			 + "<td>" + data.countPost + "</td>"
-			 + "<td>" + data.desc + "</td>"
-			 + "<td><img src='${pageContext.request.contextPath}/assets/images/delete.jpg'></td>"
-			 + "</tr>";
-	$(".admin-cat").append(html);	
-}
+		var no = $(this).data('no');
+		console.log("no : " + no);
+// 		$(this).parent().parent().remove();
+		$("#hidden-no").val(no);
+// 		$('#admin-cat tr').remove();
+// 		$('#admin-cat tr[data-no=59]').remove();
+// 		$('#admin-cat tr img[data-no=62].parent()').remove();
+// 		$('#admin-cat tr img[data-no=63]').remove();
+		
+		
+		dialogDelete.dialog('open');
+	});
+	
+});
 
-
+//카테고리 삭제
 
 </script>
 </head>
@@ -86,7 +130,7 @@ function refreshTable(data) {
 					<li class="selected">카테고리</li>
 					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/write">글작성</a></li>
 				</ul>
-		      	<table class="admin-cat">
+		      	<table class="admin-cat" id="admin-cat">
 		      		<tr>
 		      			<th>번호</th>
 		      			<th>카테고리명</th>
@@ -96,13 +140,12 @@ function refreshTable(data) {
 		      		</tr>
 		      		<c:set var='count' value='${fn:length(clist) }' />
 					<c:forEach items='${clist }' var='cdto' varStatus='status'>
-	      			<input type="hidden" id="categoryNo" value="${cdto.no}" />
 						<tr>
 							<td>${status.index+1 }</td>
 							<td>${cdto.name }</td>
 							<td>${cdto.countPost }</td>
 							<td>${cdto.desc }</td>
-							<td><img id="deleteButton" value="${cdto.no }" src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
+							<td><img data-no='${cdto.no }' src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
 						</tr>  
       				</c:forEach>
 				</table>
@@ -124,7 +167,16 @@ function refreshTable(data) {
 		      				<input type="submit" id="addButton" value="카테고리 추가">
 		      			</td>
 		      		</tr>
-		      	</table> 
+		      	</table>
+		      	<!-- 삭제 다이어로그 창 -->
+	      		<div id="dialog-delete-form" title="카테고리 삭제" style="display:none">
+			  		<p class="validateTips normal">정말로 카테고리를 삭제하시겠습니까?</p>
+			  		<p class="validateTips error" style="display:none">에러가 발생했습니다.</p>
+			  		<form>
+						<input type="hidden" id="hidden-no" value="">
+						<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+					</form>
+				</div>	
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/blog/include/footer.jsp" />

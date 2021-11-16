@@ -36,4 +36,10 @@
 		</choose>
 	</insert>
 	
+	<delete id="delete" parameterType="Long">
+		<![CDATA[
+			delete from category where no=#{no }
+		]]>
+	</delete>
+	
 </mapper>

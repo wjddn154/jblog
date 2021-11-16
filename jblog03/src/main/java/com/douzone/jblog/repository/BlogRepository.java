@@ -58,6 +58,11 @@ public class BlogRepository {
 		return sqlSession.selectOne( "categorydto.findCategoryDTO", categoryVO);
 	}
 
+	public boolean categoryDeleteByNo(Long no) {
+		int count = sqlSession.delete("category.delete", no);
+		return count == 1;		
+	}
+
 	
 	
 }
